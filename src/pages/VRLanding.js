@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Glasses, Headphones, Home, HelpCircle, Users, Clock, Wifi, MousePointer, CheckCircle } from 'lucide-react';
+import { Glasses, Home, HelpCircle, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const VRLanding = () => {
-  const [activeMode, setActiveMode] = useState(null);
   const [showVideo, setShowVideo] = useState(false);
-  const [downloadUrl, setDownloadUrl] = useState('/assets/VR_Walkthrough_Universal.mp4');
+  const [downloadUrl, setDownloadUrl] = useState('https://qwivkuxikyjhmuzg.public.blob.vercel-storage.com/VR_Walkthrough_Universal.mp4');
   const [downloadFilename, setDownloadFilename] = useState('VR_Walkthrough_Universal.mp4');
+  const [videoSource, setVideoSource] = useState('https://qwivkuxikyjhmuzg.public.blob.vercel-storage.com/VR_Walkthrough_Universal.mp4');
 
   useEffect(() => {
-    // Set download info for the single video file
-    setDownloadUrl('/assets/VR_Walkthrough_Universal.mp4');
+    // Set the video source to the Vercel Blob video
+    setVideoSource('https://qwivkuxikyjhmuzg.public.blob.vercel-storage.com/VR_Walkthrough_Universal.mp4');
+    setDownloadUrl('https://qwivkuxikyjhmuzg.public.blob.vercel-storage.com/VR_Walkthrough_Universal.mp4');
     setDownloadFilename('VR_Walkthrough_Universal.mp4');
     
-    console.log('📹 Video source: VR_Walkthrough_Universal.mp4');
+    console.log('☁️ Video source: VR_Walkthrough_Universal.mp4 (Vercel Blob)');
     console.log('📥 Download URL:', downloadUrl);
     console.log('📁 Download filename:', downloadFilename);
   }, [downloadUrl]);
@@ -42,7 +43,7 @@ const VRLanding = () => {
     }, 500);
   };
 
-  const handleUploadVideo = () => {
+  const handleToggleVideo = () => {
     const newShowVideo = !showVideo;
     setShowVideo(newShowVideo);
     
@@ -54,6 +55,8 @@ const VRLanding = () => {
       }
     }
   };
+
+
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -122,12 +125,13 @@ const VRLanding = () => {
                     loop
                     style={{backgroundColor: 'black'}}
                     onLoadStart={() => {
-                      console.log('🔄 Video loading from assets folder...');
+                      console.log('🔄 Video loading from Vercel Blob...');
                     }}
                     onLoadedData={(e) => {
-                      console.log('✅ VR Walkthrough loaded and ready to play from assets');
+                      console.log('✅ VR Walkthrough loaded and ready to play');
                       console.log('📊 Video dimensions:', e.target.videoWidth, 'x', e.target.videoHeight);
                       console.log('🎯 Successfully loaded video source:', e.target.currentSrc);
+                      console.log('☁️ Source: Vercel Blob cloud storage');
                     }}
                     onCanPlay={() => {
                       console.log('✅ Video can play - ready for playback');
@@ -149,7 +153,7 @@ const VRLanding = () => {
                     }}
                   >
                     <source 
-                      src="/assets/VR_Walkthrough_Universal.mp4" 
+                      src={videoSource} 
                       type="video/mp4"
                     />
                     <p className="text-center p-4 text-white">
@@ -159,7 +163,7 @@ const VRLanding = () => {
                         Play video directly
                       </a>
                       |
-                      <a href="/assets/VR_Walkthrough_Universal.mp4" className="text-[#AC5757] underline ml-2" download="VR_Walkthrough_Universal.mp4">
+                      <a href={downloadUrl} className="text-[#AC5757] underline ml-2" download={downloadFilename}>
                         Download video
                       </a>
                     </p>
@@ -183,8 +187,8 @@ const VRLanding = () => {
               </div>
               <div className="flex items-center gap-3">
                 <a
-                  href="/assets/VR_Walkthrough_Universal.mp4"
-                  download="VR_Walkthrough_Universal.mp4"
+                  href={downloadUrl}
+                  download={downloadFilename}
                   className="px-4 py-2 rounded-lg bg-gray-500 hover:bg-gray-400 text-white text-sm font-semibold transition-colors inline-flex items-center gap-2"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -201,42 +205,7 @@ const VRLanding = () => {
                   </svg>
                   {showVideo ? 'Restart Walkthrough' : 'Launch Walkthrough'}
                 </button>
-                <button 
-                  onClick={() => {
-                    console.log('🧪 Testing video source...');
-                              console.log('Source 1: /assets/test_video.mp4 (Test Video)');
-          
-          // Test direct video access
-          const testUrl = window.location.origin + '/assets/test_video.mp4';
-                    console.log('🔗 Testing direct access:', testUrl);
-                    
-                    // Test if file is accessible
-                    fetch('/assets/test_video.mp4')
-                      .then(response => {
-                        if (response.ok) {
-                          console.log('✅ Video file is accessible, status:', response.status);
-                          console.log('✅ Content-Type:', response.headers.get('content-type'));
-                          console.log('✅ Content-Length:', response.headers.get('content-length'));
-                        } else {
-                          console.error('❌ Video file not accessible, status:', response.status);
-                        }
-                      })
-                      .catch(error => {
-                        console.error('❌ Error accessing video file:', error);
-                      });
-                    
-                    // Create test video element
-                    const testVideo = document.createElement('video');
-                    testVideo.src = testUrl;
-                    testVideo.onloadstart = () => console.log('✅ Test video started loading');
-                    testVideo.onloadeddata = () => console.log('✅ Test video loaded successfully');
-                    testVideo.onerror = (e) => console.log('❌ Test video failed:', e);
-                    testVideo.load();
-                  }}
-                  className="px-3 py-2 rounded bg-blue-600 hover:bg-blue-500 text-white text-xs"
-                >
-                  Test Sources
-                </button>
+
               </div>
             </div>
           </div>
